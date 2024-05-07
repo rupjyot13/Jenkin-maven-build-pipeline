@@ -100,7 +100,7 @@ pipeline {
                 }
             }
         }
-    failure {
+    	failure {
             // Send email notification in case of build failure
             emailext (
                 to: 'rupeshshinde1@gmail.com', 
