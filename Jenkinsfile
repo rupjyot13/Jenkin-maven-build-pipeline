@@ -5,7 +5,7 @@ pipeline {
         SONAR_VERSION = '8.9.1'
         SONAR_HOST_URL = 'http://13.71.99.161:9090'
         SONAR_LOGIN = credentials('sonarqube-token')
-		NEXUS_URL = 'http://159.223.191.140:8081'
+	NEXUS_URL = 'http://159.223.191.140:8081'
         NEXUS_CREDENTIALS_ID = 'nexus-cred'
         PACKAGE_VERSION = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
     }
@@ -25,7 +25,7 @@ pipeline {
             }
         }
 		
-		 stage('Unit Test') {
+	 stage('Unit Test') {
             steps {
                 // Run unit tests with JUnit to generate test reports
                 sh 'mvn test'
@@ -39,15 +39,15 @@ pipeline {
             }
         }
 
-        stage('Static Code Analysis') {
+         stage('Static Code Analysis') {
             steps {
                 // Execute SonarQube analysis
                 sh "mvn sonar:sonar -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_LOGIN} -Dsonar.projectKey=test_project -Dsonar.projectName=test_project -Dsonar.projectVersion=1.0"
             }
         }
 		
-		stage('Publish to Nexus') {
-            steps {
+	    stage('Publish to Nexus') {
+              steps {
                 script {
                     // Deploy package to Nexus
                     def nexusArtifactUploader = NexusArtifactUploader.fromMaven(projectVersion: PACKAGE_VERSION)
@@ -64,8 +64,8 @@ pipeline {
             }
         }
 		
-		stage('Download from Nexus') {
-            steps {
+	    stage('Download from Nexus') {
+              steps {
                 // Download the artifact from Nexus
                 script {
                     def nexusArtifactDownloader = NexusArtifactDownloader.fromMaven()
@@ -82,9 +82,9 @@ pipeline {
             }
         }
 		
-		stage('Deploy to QA Environment') {
-            agent { label 'QA environment' }
-            steps {
+	   stage('Deploy to QA Environment') {
+             agent { label 'QA environment' }
+             steps {
                 sh 'java -jar sprinboot.jar'
             }
         }
@@ -100,7 +100,7 @@ pipeline {
                 }
             }
         }
-        failure {
+    failure {
             // Send email notification in case of build failure
             emailext (
                 to: 'rupeshshinde1@gmail.com', 
